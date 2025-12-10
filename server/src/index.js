@@ -2,12 +2,19 @@
 import dotenv from "dotenv"
 import connectDB from "./db/dbConnect.js"
 import express from "express"
+import cors from "cors"
+import userRouter from "./routes/user.routes.js"
 
 const app = express();
 
 dotenv.config({
     path: "./.env"
 })
+
+app.use(cors())
+app.use(express.json())
+
+app.use("/api/v1/user", userRouter)
 
 try {
     
