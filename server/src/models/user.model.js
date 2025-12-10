@@ -25,7 +25,7 @@ const UserSchema = new Schema(
     annualIncome: { type: Number, required: true },
     educationLevel: { type: String },
 
-    authProviderId: { type: String },
+    authProviderId: { type: String , required: true },
   },
   { timestamps: true }
 );
