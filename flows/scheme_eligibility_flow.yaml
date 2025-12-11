@@ -31,6 +31,14 @@ tasks:
         }
       }
 
+  - id: send_eligibility
+    type: io.kestra.plugin.core.http.Request
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/eligibility
+    uri: http://host.docker.internal:8000/api/v1/scheme/eligibility
+    body: "{{ outputs.eligibility_agent.predictions }}"
+    contentType: application/json
+
   - id: document_agent
     type: io.kestra.plugin.gemini.StructuredOutputCompletion
     apiKey: "{{ kv('GEMINI_API_KEY') }}"
@@ -66,6 +74,14 @@ tasks:
         }
       }
 
+  - id: send_documents
+    type: io.kestra.plugin.core.http.Request
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/documents
+    uri: http://host.docker.internal:8000/api/v1/scheme/documents
+    body: "{{ outputs.document_agent.predictions }}"
+    contentType: application/json
+
   - id: timeline_agent
     type: io.kestra.plugin.gemini.StructuredOutputCompletion
     apiKey: "{{ kv('GEMINI_API_KEY') }}"
@@ -92,3 +108,11 @@ tasks:
           }
         }
       }
+
+  - id: send_timeline
+    type: io.kestra.plugin.core.http.Request
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/timeline
+    uri: http://host.docker.internal:8000/api/v1/scheme/timeline
+    body: "{{ outputs.timeline_agent.predictions }}"
+    contentType: application/json
