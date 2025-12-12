@@ -38,6 +38,9 @@ The server receives and logs the data from the Kestra flow.
 ## 2. Setting up Kestra
 
 1.  Ensure Kestra is running (usually via Docker Compose).
+```bash
+docker run --pull=always --rm -it -p 8080:8080 --user=root -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp kestra/kestra:latest server local
+```
 
 2.  **Add Secrets/KV Pairs**:
     You need to add the following KV pairs or Secrets in your Kestra instance:

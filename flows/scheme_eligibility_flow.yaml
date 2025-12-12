@@ -38,6 +38,11 @@ tasks:
     uri: http://host.docker.internal:8000/api/v1/scheme/eligibility
     body: "{{ outputs.eligibility_agent.predictions }}"
     contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
 
   - id: document_agent
     type: io.kestra.plugin.gemini.StructuredOutputCompletion
@@ -81,6 +86,11 @@ tasks:
     uri: http://host.docker.internal:8000/api/v1/scheme/documents
     body: "{{ outputs.document_agent.predictions }}"
     contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
 
   - id: timeline_agent
     type: io.kestra.plugin.gemini.StructuredOutputCompletion
@@ -116,3 +126,8 @@ tasks:
     uri: http://host.docker.internal:8000/api/v1/scheme/timeline
     body: "{{ outputs.timeline_agent.predictions }}"
     contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
