@@ -1,0 +1,140 @@
+id: scheme_eligibility_flow
+namespace: dev
+inputs:
+  - id: user_details
+    type: STRING
+    defaults: '{"gender": "Male", "age": 30, "marital_status": "Single", "state": "Karnataka", "area": "Urban", "category": "General", "pwd": "No", "minority": "No", "student": "No", "bpl": "No"}'
+
+tasks:
+  - id: eligibility_agent
+    type: io.kestra.plugin.gemini.StructuredOutputCompletion
+    apiKey: "{{ kv('GEMINI_API_KEY') }}"
+    model: "gemini-2.5-flash"
+    prompt: |
+      Given the user profile {{ trigger.body.user_details ?? inputs.user_details }}, find relevant government schemes from myscheme.gov.in using search.
+    jsonResponseSchema: |
+      {
+        "type": "object",
+        "properties": {
+          "schemes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scheme_name": { "type": "string" },
+                "description": { "type": "string" },
+                "benefits": { "type": "string" }
+              },
+              "required": ["scheme_name", "description"]
+            }
+          }
+        }
+      }
+
+  - id: send_eligibility
+    type: io.kestra.plugin.core.http.Request
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/eligibility
+    uri: http://host.docker.internal:8000/api/v1/scheme/eligibility
+    body: "{{ outputs.eligibility_agent.predictions }}"
+    contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
+
+  - id: document_agent
+    type: io.kestra.plugin.gemini.StructuredOutputCompletion
+    apiKey: "{{ kv('GEMINI_API_KEY') }}"
+    model: "gemini-2.5-flash"
+    prompt: |
+      For the schemes listed below, find required documents and how to procure them using search.
+      Schemes: {{ outputs.eligibility_agent.predictions }}
+    jsonResponseSchema: |
+      {
+        "type": "object",
+        "properties": {
+          "schemes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scheme_name": { "type": "string" },
+                "documents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "document_name": { "type": "string" },
+                      "procurement_method": { "type": "string" }
+                    },
+                    "required": ["document_name", "procurement_method"]
+                  }
+                }
+              },
+              "required": ["scheme_name", "documents"]
+            }
+          }
+        }
+      }
+
+  - id: send_documents
+    type: io.kestra.plugin.core.http.Request
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/documents
+    uri: http://host.docker.internal:8000/api/v1/scheme/documents
+    body: "{{ outputs.document_agent.predictions }}"
+    contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
+
+  - id: timeline_agent
+    type: io.kestra.plugin.gemini.StructuredOutputCompletion
+    apiKey: "{{ kv('GEMINI_API_KEY') }}"
+    model: "gemini-2.5-flash"
+    prompt: |
+      Create a timeline for applying to these schemes based on the documents required.
+      Documents: {{ outputs.document_agent.predictions }}
+    jsonResponseSchema: |
+      {
+        "type": "object",
+        "properties": {
+          "timeline_steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "step_order": { "type": "integer" },
+                "action": { "type": "string" },
+                "description": { "type": "string" },
+                "estimated_duration": { "type": "string" }
+              },
+              "required": ["step_order", "action", "description"]
+            }
+          }
+        }
+      }
+
+  - id: send_timeline
+    type: io.kestra.plugin.core.http.Request
+    dependsOn: 
+      - timeline_agent
+    method: POST
+    # uri: http://localhost:8000/api/v1/scheme/timeline
+    uri: http://host.docker.internal:8000/api/v1/scheme/timeline
+    body: "{{ outputs.timeline_agent.predictions }}"
+    contentType: application/json
+    retry:
+      type: constant
+      interval: PT30S
+      maxAttempt: 3
+    allowFailed: false
+
+triggers:
+  - id: webhook
+    type: io.kestra.plugin.core.trigger.Webhook
+    key: agent-assemble-secret-key
