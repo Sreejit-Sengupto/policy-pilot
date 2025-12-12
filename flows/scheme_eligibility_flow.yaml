@@ -11,7 +11,7 @@ tasks:
     apiKey: "{{ kv('GEMINI_API_KEY') }}"
     model: "gemini-2.5-flash"
     prompt: |
-      Given the user profile {{ inputs.user_details }}, find relevant government schemes from myscheme.gov.in using search.
+      Given the user profile {{ trigger.body.user_details ?? inputs.user_details }}, find relevant government schemes from myscheme.gov.in using search.
     jsonResponseSchema: |
       {
         "type": "object",
@@ -121,6 +121,8 @@ tasks:
 
   - id: send_timeline
     type: io.kestra.plugin.core.http.Request
+    dependsOn: 
+      - timeline_agent
     method: POST
     # uri: http://localhost:8000/api/v1/scheme/timeline
     uri: http://host.docker.internal:8000/api/v1/scheme/timeline
@@ -131,3 +133,8 @@ tasks:
       interval: PT30S
       maxAttempt: 3
     allowFailed: false
+
+triggers:
+  - id: webhook
+    type: io.kestra.plugin.core.trigger.Webhook
+    key: agent-assemble-secret-key

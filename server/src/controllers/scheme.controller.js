@@ -31,7 +31,7 @@ export const logEligibility = async (req, res) => {
         return res.status(200).json({ message: "Eligibility data received" });
     } catch (error) {
         console.error("Error logging eligibility data:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -61,7 +61,7 @@ export const logDocuments = async (req, res) => {
         return res.status(200).json({ message: "Documents data received" });
     } catch (error) {
         console.error("Error logging documents data:", error);
-        retunr res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -89,5 +89,50 @@ export const logTimeline = async (req, res) => {
     } catch (error) {
         console.error("Error logging timeline data:", error);
         return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+/**
+ * Triggers the Kestra scheme eligibility flow.
+ * Expected Body: User details object
+ * Example Input:
+ * {
+ *   "gender": "Male",
+ *   "age": 30,
+ *   "marital_status": "Single",
+ *   "state": "Karnataka",
+ *   "area": "Urban",
+ *   "category": "General",
+ *   "person_with_disability": "No",
+ *   "minority": "No",
+ *   "student": "No",
+ *   "below_poverty_line": "No"
+ * }
+ */
+export const triggerSchemeFlow = async (req, res) => {
+    try {
+        const userDetails = req.body;
+        console.log("Triggering Kestra flow with details:", userDetails);
+
+        const response = await fetch("http://localhost:8080/api/v1/main/executions/webhook/dev/scheme_eligibility_flow/agent-assemble-secret-key", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ user_details: JSON.stringify(userDetails) })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Kestra API error: ${response.status} ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log("Kestra flow triggered:", data);
+        return res.status(200).json({ message: "Flow triggered successfully", executionId: data.id });
+
+    } catch (error) {
+        console.error("Error triggering flow:", error);
+        return res.status(500).json({ message: "Failed to trigger flow", error: error.message });
     }
 };
