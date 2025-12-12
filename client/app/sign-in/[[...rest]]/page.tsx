@@ -1,4 +1,3 @@
-// client/app/sign-in/[[...rest]]/page.tsx
 "use client";
 
 import React, { useEffect } from "react";
@@ -10,12 +9,11 @@ import RightIllustration from "@/app/component/illustrations/right-illustration"
 export default function SignInPage() {
   const router = useRouter();
   const params = useSearchParams();
-  const redirectTo = params?.get("redirectTo") ?? "/";
+  const redirectTo = params?.get("redirectTo") ?? "/home";
   const { isSignedIn } = useUser();
 
   useEffect(() => {
     if (isSignedIn) {
-      // on successful sign-in, send user to redirectTo
       router.push(redirectTo);
     }
   }, [isSignedIn, redirectTo, router]);

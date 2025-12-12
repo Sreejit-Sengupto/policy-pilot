@@ -1,4 +1,3 @@
-// client/app/sign-up/[[...rest]]/page.tsx
 "use client";
 
 import React, { useEffect } from "react";
@@ -10,7 +9,7 @@ import RightIllustration from "@/app/component/illustrations/right-illustration"
 export default function SignUpPage() {
   const router = useRouter();
   const params = useSearchParams();
-  const redirectTo = params?.get("redirectTo") ?? "/";
+  const redirectTo = params?.get("redirectTo") ?? "/home";
   const { isSignedIn } = useUser();
 
   useEffect(() => {
