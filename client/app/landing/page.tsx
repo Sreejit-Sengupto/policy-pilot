@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, ClipboardList, Calendar, ArrowRight } from "lucide-react";
-import HeroIllustration from "../component/illustrations/hero-illustration";
+import HeroIllustration from "../../component/illustrations/hero-illustration";
 
 export default function LandingPage() {
   return (

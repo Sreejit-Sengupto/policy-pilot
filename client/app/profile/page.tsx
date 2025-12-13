@@ -1,4 +1,4 @@
-import Header from "../component/header";
+import Header from "../../component/header";
 import { ProfilePage } from "./profilePage";// named import
 
 export const metadata = {

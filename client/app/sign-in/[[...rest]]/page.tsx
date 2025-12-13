@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import { SignIn, useUser } from "@clerk/nextjs";
 import { useRouter, useSearchParams } from "next/navigation";
-import LeftIllustration from "@/app/component/illustrations/left-illustration";
-import RightIllustration from "@/app/component/illustrations/right-illustration";
+import LeftIllustration from "@/component/illustrations/left-illustration";
+import RightIllustration from "@/component/illustrations/right-illustration";
 
 export default function SignInPage() {
   const router = useRouter();

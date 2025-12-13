@@ -1,6 +1,6 @@
 "use client";
 
-import SchemesPage from "../component/schemePage";
+import SchemesPage from "../../component/schemePage";
 
 export default function HomeContent({ profile }: { profile: any }) {
   return (

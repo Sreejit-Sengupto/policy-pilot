@@ -7,10 +7,10 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, FileText, CheckCircle } from "lucide-react";
 import EmptyState from "./emptystate";
-import type { Profile } from "../lib/profile";
-import { isProfileComplete } from "../lib/profile";
+import type { Profile } from "../app/lib/profile";
+import { isProfileComplete } from "../app/lib/profile";
 import Header from "./header";
-import { eligibleSchemes, timelineSteps } from "../data/scheme";
+import { eligibleSchemes, timelineSteps } from "../app/data/scheme";
 
 export default function SchemesPage({ profile }: { profile?: Profile | null }) {
   const [expandedScheme, setExpandedScheme] = useState<number | null>(null);
