@@ -1,9 +1,7 @@
-// app/onboard/page.tsx
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function OnboardPage() {
-  // ⬅ auth() must be awaited
   const { userId } = await auth();
 
   if (!userId) {
