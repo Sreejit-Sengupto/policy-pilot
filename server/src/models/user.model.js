@@ -1,4 +1,4 @@
-import { Schema, model} from "mongoose";
+import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema(
   {
@@ -25,7 +25,7 @@ const UserSchema = new Schema(
     annualIncome: { type: Number, required: true },
     educationLevel: { type: String },
 
-    authProviderId: { type: String , required: true },
+    clerkUserId: { type: String, required: true, unique: true },
   },
   { timestamps: true }
 );

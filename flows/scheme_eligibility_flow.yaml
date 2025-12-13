@@ -4,6 +4,9 @@ inputs:
   - id: user_details
     type: STRING
     defaults: '{"gender": "Male", "age": 30, "marital_status": "Single", "state": "Karnataka", "area": "Urban", "category": "General", "pwd": "No", "minority": "No", "student": "No", "bpl": "No"}'
+  - id: clerkUserId
+    type: STRING
+    defaults: "user_default"
 
 tasks:
   - id: eligibility_agent
@@ -36,7 +39,12 @@ tasks:
     method: POST
     # uri: http://localhost:8000/api/v1/scheme/eligibility
     uri: http://host.docker.internal:8000/api/v1/scheme/eligibility
-    body: "{{ outputs.eligibility_agent.predictions }}"
+    body: |
+      {
+        "clerkUserId": "{{ trigger.body.clerkUserId ?? inputs.clerkUserId }}",
+        "executionId": "{{ execution.id }}",
+        "data": {{ outputs.eligibility_agent.predictions }}
+      }
     contentType: application/json
     retry:
       type: constant
@@ -84,7 +92,12 @@ tasks:
     method: POST
     # uri: http://localhost:8000/api/v1/scheme/documents
     uri: http://host.docker.internal:8000/api/v1/scheme/documents
-    body: "{{ outputs.document_agent.predictions }}"
+    body: |
+      {
+        "clerkUserId": "{{ trigger.body.clerkUserId ?? inputs.clerkUserId }}",
+        "executionId": "{{ execution.id }}",
+        "data": {{ outputs.document_agent.predictions }}
+      }
     contentType: application/json
     retry:
       type: constant
@@ -126,7 +139,12 @@ tasks:
     method: POST
     # uri: http://localhost:8000/api/v1/scheme/timeline
     uri: http://host.docker.internal:8000/api/v1/scheme/timeline
-    body: "{{ outputs.timeline_agent.predictions }}"
+    body: |
+      {
+        "clerkUserId": "{{ trigger.body.clerkUserId ?? inputs.clerkUserId }}",
+        "executionId": "{{ execution.id }}",
+        "data": {{ outputs.timeline_agent.predictions }}
+      }
     contentType: application/json
     retry:
       type: constant
