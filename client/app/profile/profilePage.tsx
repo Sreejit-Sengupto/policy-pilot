@@ -156,8 +156,9 @@ export function ProfilePage() {
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Gender */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Gender</label>
+                    <label htmlFor="gender" className="block text-sm font-medium text-primary mb-2">Gender</label>
                     <select
+                      id="gender"
                       name="gender"
                       value={formData.gender}
                       onChange={handleChange}
