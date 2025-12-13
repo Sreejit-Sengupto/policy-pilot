@@ -6,10 +6,10 @@ export type Profile = {
   state?: string;
   area?: string;
   category?: string;
-  pwd?: string;
-  minority?: string;
-  student?: string;
-  bpl?: string;
+  pwd?: "yes" | "no";
+  minority?: "yes" | "no";
+  student?: "yes" | "no";
+  bpl?: "yes" | "no";
 };
 
 export function isProfileComplete(profile?: Profile | null) {
