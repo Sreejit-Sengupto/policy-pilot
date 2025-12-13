@@ -7,7 +7,7 @@ import { User, MapPin, UsersIcon, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { UserButton } from "@clerk/nextjs";
-
+import Header from "@/component/header";
 
 type ProfileForm = {
   gender: string;
@@ -38,7 +38,9 @@ export function ProfilePage() {
     bpl: "no",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
 
     // convert age to number if the field is "age"
@@ -71,7 +73,8 @@ export function ProfilePage() {
     // Prepare payload in expected backend format
     const payload = {
       gender: formData.gender,
-      age: typeof formData.age === "number" ? formData.age : Number(formData.age),
+      age:
+        typeof formData.age === "number" ? formData.age : Number(formData.age),
       marital_status: formData.marital_status,
       state: formData.state,
       area: formData.area,
@@ -92,7 +95,9 @@ export function ProfilePage() {
 
       if (!res.ok) {
         // fallback
-        console.warn("Saving profile fallback to localStorage (api returned non-OK)");
+        console.warn(
+          "Saving profile fallback to localStorage (api returned non-OK)"
+        );
         localStorage.setItem("policyPilot.profile", JSON.stringify(payload));
       }
     } catch (err) {
@@ -106,43 +111,36 @@ export function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-<header className="border-b border-border bg-card sticky top-0 z-50">
-  <div className="container mx-auto px-4 flex h-16 items-center justify-between">
-    <Link href="/" className="flex items-center gap-2">
-      <div className="relative h-10 w-10 rounded-full bg-accent flex items-center justify-center">
-        <div className="h-4 w-4 rounded-full bg-white" />
-      </div>
-      <span className="text-2xl font-bold text-primary">PolicyPilot</span>
-    </Link>
-
-    {/* Right-side: Profile + Logout */}
-    <div className="flex items-center gap-4">
-      {/* Shows avatar + dropdown with logout */}
-      <UserButton afterSignOutUrl="/" />
-    </div>
-  </div>
-</header>
-
-
+      <Header />
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
           {/* Progress Indicator */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-primary">Step 2 of 3</span>
-              <span className="text-sm text-muted-foreground">Complete Your Profile</span>
+              <span className="text-sm font-medium text-primary">
+                Step 2 of 3
+              </span>
+              <span className="text-sm text-muted-foreground">
+                Complete Your Profile
+              </span>
             </div>
             <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-accent rounded-full" style={{ width: "66%" }} />
+              <div
+                className="h-full bg-accent rounded-full"
+                style={{ width: "66%" }}
+              />
             </div>
           </div>
 
           <Card className="p-8 border-2 border-border shadow-lg">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-primary mb-2">Create Your Profile</h1>
-              <p className="text-muted-foreground">Tell us about yourself to find schemes you're eligible for</p>
+              <h1 className="text-3xl font-bold text-primary mb-2">
+                Create Your Profile
+              </h1>
+              <p className="text-muted-foreground">
+                Tell us about yourself to find schemes you're eligible for
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -150,13 +148,20 @@ export function ProfilePage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-4">
                   <User className="h-5 w-5 text-accent" />
-                  <h2 className="text-xl font-bold text-primary">Personal Information</h2>
+                  <h2 className="text-xl font-bold text-primary">
+                    Personal Information
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Gender */}
                   <div>
-                    <label htmlFor="gender" className="block text-sm font-medium text-primary mb-2">Gender</label>
+                    <label
+                      htmlFor="gender"
+                      className="block text-sm font-medium text-primary mb-2"
+                    >
+                      Gender
+                    </label>
                     <select
                       id="gender"
                       name="gender"
@@ -174,7 +179,9 @@ export function ProfilePage() {
 
                   {/* Age */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Age</label>
+                    <label className="block text-sm font-medium text-primary mb-2">
+                      Age
+                    </label>
                     <input
                       type="number"
                       name="age"
@@ -190,7 +197,9 @@ export function ProfilePage() {
 
                   {/* Marital Status */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Marital Status</label>
+                    <label className="block text-sm font-medium text-primary mb-2">
+                      Marital Status
+                    </label>
                     <select
                       name="marital_status"
                       value={formData.marital_status}
@@ -218,7 +227,9 @@ export function ProfilePage() {
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* State */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">State</label>
+                    <label className="block text-sm font-medium text-primary mb-2">
+                      State
+                    </label>
                     <select
                       name="state"
                       value={formData.state}
@@ -238,7 +249,9 @@ export function ProfilePage() {
 
                   {/* Area */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Area Type</label>
+                    <label className="block text-sm font-medium text-primary mb-2">
+                      Area Type
+                    </label>
                     <select
                       name="area"
                       value={formData.area}
@@ -258,13 +271,17 @@ export function ProfilePage() {
               <div className="space-y-4 pt-4 border-t border-border">
                 <div className="flex items-center gap-2 mb-4">
                   <UsersIcon className="h-5 w-5 text-accent" />
-                  <h2 className="text-xl font-bold text-primary">Category Information</h2>
+                  <h2 className="text-xl font-bold text-primary">
+                    Category Information
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Category */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-2">Category</label>
+                    <label className="block text-sm font-medium text-primary mb-2">
+                      Category
+                    </label>
                     <select
                       name="category"
                       value={formData.category}
@@ -286,13 +303,17 @@ export function ProfilePage() {
               <div className="space-y-4 pt-4 border-t border-border">
                 <div className="flex items-center gap-2 mb-4">
                   <Briefcase className="h-5 w-5 text-accent" />
-                  <h2 className="text-xl font-bold text-primary">Additional Details</h2>
+                  <h2 className="text-xl font-bold text-primary">
+                    Additional Details
+                  </h2>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* PWD */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-3">Person with Disability?</label>
+                    <label className="block text-sm font-medium text-primary mb-3">
+                      Person with Disability?
+                    </label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -321,7 +342,9 @@ export function ProfilePage() {
 
                   {/* Minority */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-3">Minority Community?</label>
+                    <label className="block text-sm font-medium text-primary mb-3">
+                      Minority Community?
+                    </label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -350,7 +373,9 @@ export function ProfilePage() {
 
                   {/* Student */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-3">Currently a Student?</label>
+                    <label className="block text-sm font-medium text-primary mb-3">
+                      Currently a Student?
+                    </label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -379,7 +404,9 @@ export function ProfilePage() {
 
                   {/* BPL */}
                   <div>
-                    <label className="block text-sm font-medium text-primary mb-3">Below Poverty Line (BPL)?</label>
+                    <label className="block text-sm font-medium text-primary mb-3">
+                      Below Poverty Line (BPL)?
+                    </label>
                     <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
