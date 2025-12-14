@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { SignUp, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import CustomSignUp from "@/components/auth/CustomSignUp";
 import { useRouter, useSearchParams } from "next/navigation";
 import LeftIllustration from "@/component/illustrations/left-illustration";
 import RightIllustration from "@/component/illustrations/right-illustration";
@@ -25,9 +26,7 @@ export default function SignUpPage() {
       </div>
 
       <div className="flex-1 flex items-center justify-center px-4 py-12">
-      
-          <SignUp />
-        
+        <CustomSignUp />
       </div>
 
       <div className="hidden lg:flex flex-1 items-end justify-center pb-8 px-4">
