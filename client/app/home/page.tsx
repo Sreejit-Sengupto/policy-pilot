@@ -5,11 +5,10 @@ import HomeContent from "./homeContent";
 export default async function Page() {
   const { userId } = await auth();
 
-  if (!userId) {
-    return redirect("/sign-in?redirectTo=/home");
-  }
+  // Middleware now handles protection for /home
 
-  const profile = null; 
+
+  const profile = null;
 
   return <HomeContent profile={profile} />;
 }
